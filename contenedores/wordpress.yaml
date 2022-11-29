@@ -1,0 +1,32 @@
+# Fichero de docker compose
+# En YAML existe el comcepto de ESQUEMA !... igual que en XML o en JSON
+# Esquema? Me define la estructura / Tipos de datos) que puedo poner en un documento
+
+version: "3" # Docker swarm
+
+services:
+    basedatos:           # Este nombre???? Es un nombre fqdn para referirnos a este contenedor desde la red de docker
+        image:            mysql:8.0
+        container_name:   mimysql
+        environment:
+                        - MYSQL_ROOT_PASSWORD=password
+                        - MYSQL_DATABASE=mibd
+                        - MYSQL_USER=usuario
+                        - MYSQL_PASSWORD=password
+        volumes:
+                        - /home/ubuntu/environment/datos/mysql:/var/lib/mysql
+
+    wordpress:
+        depends_on:
+                        - basedatos
+        image:            wordpress:php8.1-apache
+        container_name:   miwp
+        environment:
+                        - WORDPRESS_DB_HOST=basedatos:3306
+                        - WORDPRESS_DB_USER=usuario 
+                        - WORDPRESS_DB_PASSWORD=password 
+                        - WORDPRESS_DB_NAME=mibd 
+        volumes:
+                        - /home/ubuntu/environment/datos/wp:/var/www/html
+        ports:
+                        - 8080:80

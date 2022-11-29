@@ -1,0 +1,137 @@
+# En los ficheros yaml podemos poner comentarios. Aleluya !!!!!
+# En un fichero YAML, puede haber MUCHOS DOCUMENTOS YAML
+
+# Cada documento debe comenzar por 3 guiones: --- (en el primero es opcional poner esta marca)
+# Opcionalmente los documentos pueden acabar por 3 puntos: ... (Poco habitual en ficheros, se usa para mandar docs por red)
+...
+---
+# Un documento contiene UN DATO
+# Los datos pueden ser de distinta naturaleza:
+## DATOS escalares o simples
+## DATOS de colección
+---
+# Datos simples:
+## Números
+3
+---
+3.89
+---
+-17
+---
+.Inf
+---
+## Valores lógicos
+true # TRUE True
+---
+false # FALSE False
+---
+# NOTA: En versión 1.1 de YAML: Se permitían:
+On
+on
+ON
+off
+OFF
+Off
+Yes
+YES
+yes
+y
+No
+NO
+no
+n
+# En la versión 2 se han eliminado... ELIMINADO... NO DEPRECATED... ELIMINADO ! NO SE PUEDEN USAR !
+# Los parsers de YAML aún a día de hoy admiten algunas de esas sintaxis
+# MORALEJA: NO USAR... Que sepais lo que son, por los veis, CAMBIARLOS RAPIDAMENTE !
+---
+# Textos
+ho"l' #a
+
+Aqui pongo una segunda linea
+---
+# La contrabarra solo escapa entre comillas dobles en YAML
+# Y se permite su uso en : \" \\ \n \t
+"ho\"l' #a"
+---
+'ho"l'' #a'
+---
+
+# La sintaxis de arriba solo la usamos para textos bien sencillos.
+# YAML Ofrece 2 sintaxis adicionales para textos:
+---
+# Literal
+|4-
+    Linea 1 del #texto...
+    Linea 2 del "texto
+    Linea 3 del 'texto
+    ...
+    
+    
+    
+---
+# Folded
+>4-
+    Linea 1 del #texto
+    Linea 2 del "texto
+    Linea 3 del 'texto
+---
+# 2 tipos de colecciones principalmente:
+# Listas ordenadas
+# Colección de Datos
+- 3
+- 5
+- true
+- hola
+- 
+  - adios
+  - otro item
+  - 87
+---
+# sintaxis alternativa: Se usa poco... pero... tiene su punto
+[12, true, "hola"]
+---
+- 12
+- true
+- hola
+# Donde va a ir guardado este documento? En un sistema de control de codigo fuente ! GIT, Mercurial, SVN
+# Estos sistemas identifican cambios a nivel de LINEA DE TEXTO
+--- 
+# Cuál creeis que funcionalmente es mejor?
+# Mapas desordenados
+# Un mapa es lo que en otros lenguajes conocemos con un diccionario, array asociativo, tabla hash
+# Un conjunto de claves-valor
+nombre  : Ivan
+edad    :   "44"
+mascotas:
+    perro       : 0
+    gato        : 0
+    cocodrilo   : 1
+--- 
+# Cuál creeis que funcionalmente es mejor?
+# Mapas desordenados
+# Un mapa es lo que en otros lenguajes conocemos con un diccionario, array asociativo, tabla hash
+# Un conjunto de claves-valor
+nombre  : David
+edad    : 26
+mascotas: []
+---
+# Sintaxis alternativa:
+{ "nombre": "Ivan", "edad": 44, "mascotas":[ "perro", "gato", "cocodrilo" ] }
+---
+# NOTA, en la sintaxis 1, las claves pueden ir precedidas por un ?
+? nombre: Ivan
+? edad    :   44
+? mascotas:
+    - perro
+    - gato
+    - cocodrilo
+# Listas desordenadas
+# Mapas ordenador
+    
+
+
+
+
+
+
+
