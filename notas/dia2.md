@@ -170,3 +170,129 @@ Felipin, Debe haber una silla debajo de la ventana
 
 - Alta disponibilidad
 - Escalabilidad
+
+# Kubernetes
+
+# En kubernetes no se pueden configurar contenedores, sino pods
+
+# Qué es un POD?
+
+Un conjunto de contenedores que:
+- Comparten configuración de red... Y por tanto se pueden hablar entre si mediante: localhost
+- Se despliegan en la misma máquina 
+- Escalan juntos
+- Pueden compartir volumenes locales
+
+# Escenario 1: Instalación de wordpress
+
+- Mysql
+- Wordpress (apache+php)
+
+Los quiero en 2 pods o en 1 pod? 
+    En un pod: Mala decisión 
+        - Comparten configuración de red.... Me interesa eso? Bueno
+        - Se despliegan en la misma maquina... Me interesa eso? No aporta nada... al contrario
+        - Escalan juntos? Me interesa eso? .... NI DE COÑA !!!!!!!!
+    Cada uno en su pod... 2 pods.
+
+# Escenario 2: Instalación de servidores web
+ 
+ Apache ---> access_log < ---- filebeat / fluent
+  ^                             ^
+  C1                            C2
+  
+En el mismo pod o en distintos pods?
+    En un pod:  GENIAL !
+        - Comparten configuración de red.... Me interesa eso? Nada... no me molesta ni me aporta... no hay comunicación de red
+        - Se despliegan en la misma maquina... Me interesa eso? MONTONON: Tener un volumen compartido RAM
+        - Escalan juntos? Me interesa eso? .... POR SUPUESTO: Cada Apache lleva su filebeat... chupando rueda... peago al culo!
+                                                Filebeat es un SIDECAR del Apache
+        - Pueden compartir volumenes locales? PUES CLARO !
+
+########################################################################################################################
+#               Arquitectura de red de kubernetes
+########################################################################################################################
+
+Supermercado                                                                    Cluster de Kubernetes
+    Carnicería                                                                  Servicio
+        Sacar numero: Pantalla / Altavoz                                        Balanceador de carga
+        Nevera / Mostrador                                                      Volumen
+            Productos: Carne                                                        Datos
+        Puesto de trabajo 1:                                                    Maquina donde corren los procesos/contenedores
+            Cuchillos                                                               CPU
+            tabla                                                                   RAM
+            báscula                                                                 GPU
+            Carnicero1                                                          Pods... contenedores
+        Puesto de trabajo 2:
+            Carnicero2
+    Pescadería                                                                  Servicio
+    Frutería
+    Cajas
+        Fila única... PANTALLA                                                  Balanceador de carga
+        Puesto de trabajo:
+            Caja con monedas, cinta transportadora
+            Cajero
+    Puertas clientes                                                            Proxy reverso - Ingress - Router (OpenShift)
+    Puertas mercancias
+    Puerta de personal
+    CARTELES: Informan de donde están los servicios                             DNS
+    Gerente del supermercado                                                    Kubernetes
+        Perfil de un empleado                                                   Imagen de contenedor
+YO -> Productos: Datos
+
+Se parece eso a la tienda de ultramarinos de la esquina, la que lleva el tio Pere !     Docker
+
+# Cómo se llaman esas cosas en Kubernetes: TIPOS DE OBJETOS EN KUBERNETES
+
+## POD
+
+Conjunto de contenedores que .....
+Sabeis cuántos pods vamos a crear en un cluster de Kubernetes? NINGUNO !
+No creamos pods en el cluster de Kubernetes. Nadie crea pod en el cluster de kubernetes
+
+Pero si vamos a tener muchos pods ahí dentro del cluster... pues si nosotros no creamos esos pods... quien los creará?
+Kubernetes... al fin y al cabo es su cluster... "El cluster de Kubernetes"
+
+Nosotros le damos instrucciones a Kubernetes para que cree pods. Y eso lo hacemos a través de:
+
+## DEPLOYMENT
+
+Plantilla de POD + Número de replicas
+
+## STATEFULSET
+
+Plantilla de POD + Plantilla de Peticion De Volumen persistente + Número de replicas
+
+## DAEMONSET
+
+Plantilla de POD (Kubernetes se asegura que tenga un pod creado desde esa plantilla en cada nodo del cluster).
+
+Nosotros los usamos poco... por no decir nada!
+Se usan para cosas más de infraestructura (administradores del cluster)
+
+## SERVICE
+
+Una entrada en el DNS de kubernetes + ALGO MAS QUE OS CUENTO MAÑANA !
+
+---------------------------------------------- Red de la empresa
+| Cluster de Producción
+||==IP(M1,VM1)==Maquina 1
+||-------IP_PA1_1----- Pod Apache App1 - 1
+||
+||==IP(M2,VM2)==Maquina 2
+||-------IP_BBDD------ Pod BBDD
+||
+||==IP(M3,VM3)==Maquina 3
+||-------IP_PA1_2----- Pod Apache App1 - 2
+||
+||==IP(M4,VM4)==Maquina N
+||
+||- Servidor de DNS
+        basedatos = IP_BBDD
+
+Pregunta: Que configuración pongo en el Apache, para que pueda acceder a la BBDD? IP/HOST donde está la BBDD...
+Cúal pongo? IP_BBDD? Funcionaría esto? Funcionaría GUAY !
+                     Queremos esto?    NI DE COÑA ! Por qué? 
+                     - Primero, que no conozco la IP
+                     - Segundo, estoy en un entorno de HA, y en cuanto se mueva el POD, se le cambia la IP
+Qué voy a necesitar? Un fqdn -> DNS
