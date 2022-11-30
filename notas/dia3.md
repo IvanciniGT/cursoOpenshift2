@@ -214,3 +214,99 @@ Ingress + Configuración automatizada del DNS Externo
 ## PETICION DE VOLUMEN PERSISTENTE
 ## STORAGECLASS
 ## PROVISIONER
+
+----
+
+## Plantilla de pod:
+
+- Contenedores
+    Para cada uno: 
+        - Imagen
+        - Puertos
+        - Variables de entorno
+        - Punto de montaje de cada volumen
+- Definición Volumenes
+
+> Ejemplo: POD Apache y fluend(que es el programa que lee los datos del log del apache)
+POD Apache
+- Contenedores:
+    - apache:
+        - puerto: 80
+        - variables de entorno... configuración
+        - CarpetaDeLosLogs -> /var/apache/logs
+    - fluentd                                                   ---->           ES (aquí se persistan y se auditen)
+        - variables de entorno... configuración
+        - CarpetaDeLosLogs -> /var/fluentd/inputFiles
+- Volumenes:
+    - CarpetaDeLosLogs:
+        De qué petición de volumen sale el volumen que vamos a usar
+                                        
+
+## Usos de volumenes
+
+- Compartir datos entre contenedores
+- Inyectar ficheros/directorios/configuración a contenedores
+- Persistencia de datos
+
+## Tipos de volumenes
+- Volumenes no persistentes     Cuando vaya a hacer otros usos del volumen.
+    - emptyDir:     Crea una carpeta vacia en el host... que se borrará si se borra el POD.
+    - configMap:    Permite inyectar un fichero al POD (a sus contenedores)
+    - secret:       Igual... pero con datos sensibles
+    - host:         Una carpeta que ya existe en el host y que inyecto en el POD (y sus contenedores). Se usa poco
+- Volumenes persistentes:       Cuando vaya a usar el volumen para tener perstencia             PERSISTENTVOLUME
+                                de datos que tienen que mantenerse si se elimina el pod
+    - El clouds: AWS, AZURE; GCP, VMWare
+    - En una cabina, en un nfs
+
+
+## Quién escribe el fichero de una plantilla de POD?
+
+El equipo de desarrollo!
+
+## Quién detalla un volumen?
+
+El equipo de almacenamiento... sysadmins... los que están con el cluster de kubernetes.
+
+# Para resolver esta situación, en Kubernetes existe el concepto de:
+PETICION DE VOLUMEN PERSISTENTE!                                                            PersistentVolumeClaim
+
+Como desarrollo que pido? 
+    Necesito un volumen con estas características:
+        - Capacidad
+        - Rendimiento: Lento, Rápido, Super-rápido, Super-lento (backups)
+                                        ^ Cache
+        - Encripción? SI
+        - Nivel de redundancia! x3 RAID5
+        - Concurrencia
+                                                Lo hace kubernetes en autom.
+                                                             v
+|----------------- negocio / desarrollo ------------------|      |---- provisionador!!! ----|       |----- Administrador ------------------------|
+PLANTILLA POD MARIAB <---> PETICION DE VOLUMEN (33)MARIADB <---> VOLUMEN PERSISTENTE MARIADB <----> STORAGE CLASS
+Quiero un mariadb           Quiero un volumen                       Volumen en AWS                      Cuando pidan un volumen persistente de 
+Que guarde datos            Rapidito                                Con id: 1928346423284               Rapidito y Redundante x 4
+en el volumen asociado      Con 4 Gbs                                                                   Provisioner !!!! Crealo en AWS con estas credenciales
+a la peticion 33                                                                                                          y esta configuración
+
+Yo defino el POD MariaDB
+- contenedores
+    - mariadb
+        - imagen: Mariadb 5.7.4
+- volumen: se saca de la peticion 33
+
+Ese pod le defino hoy....
+Y dentro de un año:
+
+POD MariaDB v2
+- contenedores
+    - mariadb
+        - imagen: Mariadb 7.9
+- volumen: se sigue sacando de la peticion 33
+
+# Objetos que configuran los administradores de cluster para limitar lo que pueden pedir los desarrolladores/negocio
+
+LIMIT RANGE
+RESOURCE QUOTAS
+Te voy a dejar usar: 16 cores, 20Gbs RAM, 4 PVC, 40 Gbs 
+
+NAMESPACE (Kubernetes) / PROYECT (Openshift)
