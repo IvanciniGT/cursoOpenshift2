@@ -232,7 +232,7 @@ Supermercado                                                                    
         Puesto de trabajo:
             Caja con monedas, cinta transportadora
             Cajero
-    Puertas clientes                                                            Proxy reverso - Ingress - Router (OpenShift)
+    Puertas clientes                                                            Proxy reverso - IngressController - Router (OpenShift)
     Puertas mercancias
     Puerta de personal
     CARTELES: Informan de donde están los servicios                             DNS
@@ -272,7 +272,7 @@ Se usan para cosas más de infraestructura (administradores del cluster)
 
 ## SERVICE
 
-Una entrada en el DNS de kubernetes + ALGO MAS QUE OS CUENTO MAÑANA !
+Una entrada en el DNS de kubernetes + ALGO MAS QUE OS CUENTO MAÑANA: IP de balanceo de carga
 
 ---------------------------------------------- Red de la empresa
 | Cluster de Producción
