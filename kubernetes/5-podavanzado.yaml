@@ -5,7 +5,12 @@ metadata:
     name: podavanzado
 
 spec:
-    containers:
+    #initContainers:
+        # Aqui dentro podríamos definir contenedores con scripts o comandos que deben acabar en un tiempo determinado
+        # Y que se ejecutan antes de los contenedores de abajo.
+        # La idea de estos es que siorvan de preparación del entorno para los de abajo
+    containers: # Los contenedores aqui definidos, deben contener procesos que queden en ejecución perpetua
+                # Deben ejecutar servicios o demonios.
         -   name:     contenedor1
             image:    nginx:latest
             imagePullPolicy: IfNotPresent
@@ -16,8 +21,15 @@ spec:
             volumeMounts:
             - name: configuracion-segundo-nginx
               mountPath: /etc/nginx/conf.d/
+            - name: datos
+              mountPath: /datos
     volumes:
         - name: configuracion-segundo-nginx
           ## Tipo de volumen
           configMap: 
             name: configuracion-nginx
+            
+        - name: datos
+          ## Tipo de volumen
+          persistentVolumeClaim:
+            claimName: peticion-volumen-datos-nginx
