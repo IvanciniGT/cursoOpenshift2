@@ -1,0 +1,23 @@
+kind: Pod
+apiVersion: v1
+
+metadata:
+    name: podavanzado
+
+spec:
+    containers:
+        -   name:     contenedor1
+            image:    nginx:latest
+            imagePullPolicy: IfNotPresent
+
+        -   name:     contenedor2
+            image:    nginx:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+            - name: configuracion-segundo-nginx
+              mountPath: /etc/nginx/conf.d/
+    volumes:
+        - name: configuracion-segundo-nginx
+          ## Tipo de volumen
+          configMap: 
+            name: configuracion-nginx

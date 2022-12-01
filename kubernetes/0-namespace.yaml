@@ -1,0 +1,9 @@
+kind: Namespace         # Tipo de objeto
+apiVersion: v1          # Libreria que define ese tipo de objeto
+                        # nombre/version
+metadata:
+    name: ivan2         # nombre.
+                        # Este nombre es el que debe ser UNICO:
+                            # A nivel de namespace
+                            # O de cluster
+                        #... dependiendo del tipo de objeto

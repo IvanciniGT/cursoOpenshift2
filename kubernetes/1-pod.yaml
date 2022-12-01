@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+
+metadata:
+    name: nginxa
+    labels:
+        aqui-hay: un-nginx
+
+spec:
+    containers:
+        - # Contenedor nginx
+            name:     contenedor-nginx
+            image:    nginx:latest

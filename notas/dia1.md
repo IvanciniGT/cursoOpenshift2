@@ -188,14 +188,18 @@ Nginx 2 - 55% ---> OFLINE
 
 Cluster de Kubernetes
     Maquina 1
+        kubelet
         docker: containerd, crio
             nginx1 --> Limitacions de Recursos
     Maquina 2
+        kubelet
         docker: containerd, crio
             mysql2 --> Sus propias limitaciones de recursos
     Maquina 3   CATAPLOF
+        kubelet
         docker: containerd, crio
     Maquina N
+        kubelet
         docker: containerd, crio
             nginx2 --> Limitacions de Recursos
             nginx3 --> Limitacions de Recursos

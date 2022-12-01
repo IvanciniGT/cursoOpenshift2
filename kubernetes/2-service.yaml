@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+
+metadata:
+    name: nginx-servicio     # fqdn que se da de alta en el DNS de Kubernetes
+
+spec:
+    type: ClusterIP # NodePort # LoadBalancer
+    ports:
+        - port: 8888        # En la IP de balanceo
+          targetPort: 80    # El puerto en el contenedor
+    selector:
+        aqui-hay: un-nginx

@@ -309,4 +309,12 @@ LIMIT RANGE
 RESOURCE QUOTAS
 Te voy a dejar usar: 16 cores, 20Gbs RAM, 4 PVC, 40 Gbs 
 
-NAMESPACE (Kubernetes) / PROYECT (Openshift)
+# NAMESPACE (Kubernetes) / PROYECT (Openshift)
+
+Entornos lógicos de despliegue dentro del cluster de kubernetes. 
+Los namespaces se usan para:
+- Agrupar los elementos necesarios para el despliegue de una apliación
+- Crear entornos separados (desarrollo/producción/testing)
+
+Dentro de Kubernetes, los permisos se pueden asignar a nivel de namespace
+                      se pueden imponer limitaciones a los recursos que se pueden consumir del cluster a nivel de namespace
