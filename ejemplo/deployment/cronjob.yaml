@@ -1,0 +1,25 @@
+kind: CronJob
+apiVersion: batch/v1
+
+metadata:
+    name: scripts-noches
+
+spec:
+    schedule: "*/5 * * * *"
+    jobTemplate:
+        spec:
+            template:
+                spec: 
+                    containers:
+                        -   name:     script
+                            image:    image-registry.openshift-image-registry.svc:5000/ivan/script-noches:latest
+                            imagePullPolicy: IfNotPresent
+                    volumeMounts:
+                        - name: datos
+                          mountPath: /tmp/datos
+                    restartPolicy: Never
+    volumes:
+        - name: datos
+          persistentVolumeClaim:
+            claimName: peticion-volumen-scripts
+            

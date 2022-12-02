@@ -102,3 +102,8 @@ Qué es lo que configuramos Plantiollas de Jobs, que querremos que se ejecuten c
 
 1 Gibibyte = 1024 x Mebibytes = 1024 x Kibibytes = 1024 bytes
 1 Gigabyte = 1000 x Megabytes = 1000 x Kilobytes = 1000 bytes
+
+
+----
+
+ PVC   <<<<>>>>  PV

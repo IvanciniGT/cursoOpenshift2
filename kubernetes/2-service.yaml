@@ -3,6 +3,7 @@ apiVersion: v1
 
 metadata:
     name: nginx-servicio     # fqdn que se da de alta en el DNS de Kubernetes
+          # nginx-servicio.ivan
 
 spec:
     type: LoadBalancer #NodePort # ClusterIP # NodePort # LoadBalancer
@@ -12,3 +13,7 @@ spec:
           nodePort: 31181
     selector:
         aqui-hay: un-nginx
+
+# Para consultar la IP de un servicio?
+#$ kubectl describe service/nombre-servicio -n NAMESPACE
+#$ kubectl get service/nombre-servicio -n NAMESPACE -o wide

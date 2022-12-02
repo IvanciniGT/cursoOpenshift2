@@ -6,7 +6,7 @@ metadata:
 
 spec:
     replicas: 5
-
+    # $ kubectl scale desployment/NOMBRE-DEPLOYMENT -n NAMESPACE --replicas=17
     selector:
         matchLabels:
                 aqui-hay: un-nginx

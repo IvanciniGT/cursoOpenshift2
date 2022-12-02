@@ -1,0 +1,19 @@
+kind: PersistentVolume
+apiVersion: v1
+
+metadata:
+    name: volumen-datos-nginx-6876
+
+spec:
+    storageClassName: rapidito-redundante
+    capacity:
+        storage: 200Gi
+    accessModes:
+      - ReadWriteOnce
+      - ReadWriteMany
+    
+    # TIPO DE VOLUMEN: AWS, FIBRE CHANNEL,  NFS
+    # Este no vale para prod... solo para jugar
+    hostPath:
+      path: /home/ubuntu/environment/datos/nginxIvan
+      type: DirectoryOrCreate

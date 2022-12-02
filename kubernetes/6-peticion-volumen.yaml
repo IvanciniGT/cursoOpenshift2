@@ -2,12 +2,12 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 
 metadata:
-    name: peticion-volumen-datos-nginx
+    name: peticion-volumen-datos-no-asignable
 
 spec:
     resources:
       requests:
-        storage: 10Gi
+        storage: 100Gi
     storageClassName: rapidito-redundante
     accessModes:
       - ReadWriteOnce       # El volumen solo se puede montar en un "HOST"... Eso si, cualquier pod de ese host podría usarlo
